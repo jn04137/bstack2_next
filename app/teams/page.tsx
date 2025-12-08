@@ -1,4 +1,13 @@
 
+interface Team {
+	id: number;
+	nanoId: string;
+	teamName: string;
+	teamDesc: string;
+	createdAt: string;
+	updatedAt: string;
+}
+
 async function getTeams() {
 	const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/team/all`)
 	if (!res.ok) {
@@ -8,15 +17,15 @@ async function getTeams() {
 }
 
 export default async function Page() {
-	const teams = await getTeams()
+	const teams: Team[] = await getTeams()
 	console.log(teams)
 
 	return(
 		<div>
 			<h1>Teams</h1>
-			<TeamCard/>
-			<TeamCard/>
-			<TeamCard/>
+			{ teams.map((team) => (
+				<TeamCard />
+			))}
 		</div>
 	)
 }
