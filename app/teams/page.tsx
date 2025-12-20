@@ -1,3 +1,4 @@
+import Layout from "../components/layout";
 
 interface Team {
 	id: number;
@@ -17,27 +18,37 @@ async function getTeams() {
 }
 
 export default async function Page() {
+	return(
+		<Layout>
+			<Content />
+		</Layout>
+	)
+}
+
+async function Content() {
 	const teams: Team[] = await getTeams()
 	console.log(teams)
 
 	return(
 		<div>
-			<h1>Teams</h1>
+			<h1 className="text-3xl font-bold">Teams</h1>
 			{ teams.map((team) => (
-				<TeamCard />
+				<TeamCard key={team.id} team={team} />
 			))}
 		</div>
 	)
 }
 
-function TeamCard() {
+function TeamCard({team}: {
+	team: Team
+}) {
 	return(
-		<div className="bg-white/5 rounded p-3">
+		<div className="bg-white/5 rounded p-3 rounded">
 			<div>
-				<h1>Team Name</h1>
+				<h1 className="text-2xl font-bold">{team.teamName}</h1>
 			</div>
 			<div>
-				<p>This is the team</p>
+				<p>{team.teamDesc}</p>
 			</div>
 		</div>
 	)
