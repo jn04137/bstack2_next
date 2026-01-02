@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { ReactNode } from "react"
 
 export default function Layout({ children }: {
@@ -5,9 +6,9 @@ export default function Layout({ children }: {
 }) {
 	return(
 		<div className="flex justify-center">
-			<div className="flex flex-col px-5 justify-between w-2/3">
+			<div className="flex flex-col min-h-screen px-5 justify-between w-2/5">
 				<Navbar />
-				<main className="pt-2">{children}</main>
+				<main className="flex-grow pt-2">{children}</main>
 				<Footer />
 			</div>
 		</div>
@@ -16,12 +17,24 @@ export default function Layout({ children }: {
 
 function Navbar() {
 	return(
-		<div className="flex justify-between py-2">
-			<h1>bstack</h1>
-			<ul className="flex space-x-3">
-				<li>Home</li>
-				<li>Teams</li>
-				<li>Players</li>
+		<div className="flex justify-between py-2 items-center">
+			<h1 className="text-2xl font-bold"><Link href="/">bstack</Link></h1>
+			<ul className="flex space-x-3 font-semibold">
+				<li>
+					<Link href="/">
+					Home
+					</Link>
+				</li>
+				<li>
+					<Link href="/teams">
+						Teams
+					</Link>
+				</li>
+				<li>
+					<Link href="/players">
+						Players
+					</Link>
+				</li>
 			</ul>
 		</div>
 	)
