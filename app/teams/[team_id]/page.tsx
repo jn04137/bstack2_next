@@ -1,6 +1,7 @@
 
 import Link from "next/link";
 import Layout from "../../components/layout";
+import { Team } from "@/models.types";
 
 export default async function Page({params}: {
 	params: Promise<{ team_id: string }>
@@ -16,17 +17,20 @@ export default async function Page({params}: {
 
 const sectionTitleStyle = "text-sm italic pb-1.5";
 
-function Content({teamId}: {
+async function Content({teamId}: {
 	teamId: string
 }) {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/team/getTeam/${teamId}`);
+    const teamInfo: Team = await res.json();
+
 	return(
 		<div className="space-y-5">
 			<div className="flex space-x-2">
-				<TeamName teamName={"Turtle Squad"} />
+				<TeamName teamName={teamInfo.teamName} />
 			</div>
-			<TeamDesc teamDesc={"Here to win"} />
+			<TeamDesc teamDesc={teamInfo.teamDesc} />
 			<Players />
-			<Achievements />
+			<Achievements teamNanoId={teamInfo.nanoId!}/>
 			<CommentSection />
 		</div>
 	);
@@ -77,7 +81,9 @@ function PlayerCard() {
 	);
 }
 
-function Achievements() {
+function Achievements({teamNanoId}: {
+    teamNanoId: string
+}) {
 	return(
 		<div>
 			<h2 className={sectionTitleStyle}>achievements</h2>
@@ -88,16 +94,18 @@ function Achievements() {
 				<AchievementCard/>
 				<AchievementCard/>
 				<AchievementCard/>
-				<AddAchivementButton/>
+				<AddAchievementButton teamNanoId={teamNanoId}/>
 			</div>
 		</div>
 	);
 }
 
-function AddAchivementButton() {
+function AddAchievementButton({teamNanoId}: {
+    teamNanoId: string
+}) {
 	return(
 		<div>
-			<Link href="/teams/add_achievement">
+			<Link href={`/teams/add_achievement/${teamNanoId}`}>
 				<button className="text-sm w-full border border-white/5 rounded py-1.5 hover:cursor-pointer bg-white/5">Add Achievement</button>
 			</Link>
 		</div>

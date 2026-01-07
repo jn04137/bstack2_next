@@ -12,7 +12,7 @@ interface Team {
 }
 
 async function getTeams() {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/team/all`)
+	const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/team/all`);
 	if (!res.ok) {
 		console.error("Failed to fetch data");
 	}

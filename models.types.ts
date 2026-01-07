@@ -14,3 +14,13 @@ export interface Team {
 	updatedAt?: string | undefined;
 }
 
+export interface TeamAchievement {
+    id?: number;
+    teamNanoId: string;
+    event: string;
+    placement: string;
+    details: string;
+    date: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
