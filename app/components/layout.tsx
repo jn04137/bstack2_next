@@ -6,7 +6,7 @@ export default function Layout({ children }: {
 }) {
 	return(
 		<div className="flex justify-center">
-			<div className="flex flex-col min-h-screen px-5 justify-between w-2/5">
+            <div className="flex flex-col min-h-screen px-8 justify-between lg:w-3/5 2xl:w-2/3 w-full">
 				<Navbar />
 				<main className="flex-grow pt-2">{children}</main>
 				<Footer />

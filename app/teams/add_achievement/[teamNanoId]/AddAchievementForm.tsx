@@ -1,18 +1,21 @@
 'use client';
 
 import { TeamAchievement } from "@/models.types";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Link from "next/link";
-import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, Dispatch, SetStateAction, SyntheticEvent, useState } from "react";
 
 export function CreateAchievementForm({teamNanoId}: {
 	teamNanoId: string
 }) {
+	const router = useRouter();
     const [teamAchievement, setTeamAchievement] = useState<TeamAchievement>({
         teamNanoId: teamNanoId,
         event: '',
         placement: '',
         details: '',
-        date: new Date()
+        date: new Date().toISOString()
     });
 
     function handleAchievementChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -40,25 +43,31 @@ export function CreateAchievementForm({teamNanoId}: {
 			</div>
 			<div className="flex flex-col space-y-1">
 				<label>Date</label>
-                <input className="bg-white/5 p-2 rounded" type="date" name="date" onChange={e => handleAchievementChange}/>
+                <input className="bg-white/5 p-2 rounded" type="date" name="date" onChange={e => handleAchievementChange(e)}/>
 			</div>
 			<div className="flex justify-end space-x-1">
-				<button className="bg-blue-500 rounded py-0.5 px-2 hover:cursor-pointer">Submit</button>
+				<button 
+                    className="bg-blue-500 rounded py-0.5 px-2 hover:cursor-pointer" onClick={e => addAchievementRequest(e, teamAchievement, router)}>
+                    Submit
+                </button>
 				<Link href={`/teams/${teamNanoId}`}>
-					<button className="bg-gray-500 rounded px-2 py-0.5 hover:cursor-pointer">Cancel</button>
+                    <button className="bg-gray-500 rounded px-2 py-0.5 hover:cursor-pointer" >Cancel</button>
 				</Link>
 			</div>
 		</form>
 	);
 }
 
-async function addAchievementRequest(e: SyntheticEvent, teamAchievement: TeamAchievement) {
+async function addAchievementRequest(e: SyntheticEvent, teamAchievement: TeamAchievement, router: AppRouterInstance) {
     e.preventDefault();
 
-    await fetch(`${process.env.NEXT_PUBLIC_SERVER}/team/addAchievement`, {
-        method: 'POST',
-        body: JSON.stringify({
-            teamAchievement
-        }),
-    });
+    try {
+        await fetch(`${process.env.NEXT_PUBLIC_SERVER}/team/addAchievement`, {
+            method: "POST",
+            body: JSON.stringify(teamAchievement),
+        });
+		router.push(`/teams/${teamAchievement.teamNanoId}`)
+    } catch(err) {
+        console.error("Failed to add new achievement: ", err)
+    }
 }

@@ -1,7 +1,7 @@
 
 import Link from "next/link";
 import Layout from "../../components/layout";
-import { Team } from "@/models.types";
+import { Team, TeamAchievement } from "@/models.types";
 
 export default async function Page({params}: {
 	params: Promise<{ team_id: string }>
@@ -98,6 +98,16 @@ function Achievements({teamNanoId}: {
 			</div>
 		</div>
 	);
+}
+
+async function getAchievements(): TeamAchievement[] {
+    try {
+	    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/team/all`);
+        const data: TeamAchievement[] = await res.json();
+        return data
+    } catch(err) {
+        console.error("Failed to fetch data", err)
+    }
 }
 
 function AddAchievementButton({teamNanoId}: {
